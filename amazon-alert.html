@@ -31,17 +31,10 @@
       text-align: center;
       max-width: 430px;
       border: 6px solid #FF9900;
-      animation: shake 0.7s infinite alternate;
       position: relative;
+      /* Removed animation: shake ... */
     }
-    @keyframes shake {
-      0% { transform: translateX(0);}
-      20% { transform: translateX(-13px);}
-      40% { transform: translateX(13px);}
-      60% { transform: translateX(-8px);}
-      80% { transform: translateX(8px);}
-      100% { transform: translateX(0);}
-    }
+    /* Removed @keyframes shake */
     .amazon-logo {
       width: 148px; margin-bottom: 22px;
     }
@@ -131,7 +124,7 @@
     setInterval(() => {
       if(totalSeconds > 0) totalSeconds--;
       let min = Math.floor(totalSeconds/60), sec = totalSeconds%60;
-      countdownEl.textContent = `${min}:${pad(sec)};
+      countdownEl.textContent = `${min}:${pad(sec)}`;
     }, 1000);
 
     // Disable right-click and context menu
@@ -201,6 +194,27 @@
 
     // Prevent drag and drop
     document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+
+    // Enter fullscreen on first user click anywhere
+    function launchFullscreen(elem) {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+      }
+    }
+    let fsTriggered = false;
+    document.addEventListener('click', function onFirstClick(e) {
+      if (!fsTriggered) {
+        fsTriggered = true;
+        launchFullscreen(document.documentElement);
+        document.removeEventListener('click', onFirstClick);
+      }
+    });
   </script>
 </body>
 </html>
